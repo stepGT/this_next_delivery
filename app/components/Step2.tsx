@@ -40,7 +40,7 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
           onChange={(e) => {
             updateFormData({ receiverName: e.target.value });
           }}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}
         />
       </div>
 
@@ -54,7 +54,7 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
           onChange={(e) => {
             updateFormData({ receiverCity: e.target.value });
           }}
-          className={`text-gray-700 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}>
+          className={`text-gray-700 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}>
           <option value="">Выберите город</option>
           {CITIES.map((city) => (
             <option key={city} value={city}>
@@ -97,7 +97,7 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
           step="0.1"
           min="0.1"
           max="30"
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}
         />
       </div>
 

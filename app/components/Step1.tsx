@@ -24,7 +24,7 @@ const Step1: React.FC<Step1Props> = ({ formData, updateFormData, onNext }) => {
           id="senderName"
           value={formData.senderName}
           onChange={(e) => updateFormData({ senderName: e.target.value })}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 `}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}
         />
       </div>
 
@@ -38,7 +38,7 @@ const Step1: React.FC<Step1Props> = ({ formData, updateFormData, onNext }) => {
           value={formData.senderPhone}
           onChange={handlePhoneChange}
           placeholder="+7 (___) ___-__-__"
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}
         />
       </div>
 
@@ -50,7 +50,7 @@ const Step1: React.FC<Step1Props> = ({ formData, updateFormData, onNext }) => {
           id="senderCity"
           value={formData.senderCity}
           onChange={(e) => updateFormData({ senderCity: e.target.value })}
-          className={`text-gray-700 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}>
+          className={`text-gray-700 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}>
           <option value="">Выберите город</option>
           {CITIES.map((city) => (
             <option key={city} value={city}>

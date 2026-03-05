@@ -20,7 +20,7 @@ const Step3: React.FC<Step3Props> = ({ formData, updateFormData, onSubmit, onBac
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-gray-50 p-6 rounded-lg space-y-4">
+      <div className="bg-gray-50 p-6 rounded-lg space-y-4 border border-gray-300">
         <h3 className="text-lg font-semibold mb-4">Проверьте введенные данные</h3>
 
         <div className="border-b border-gray-200 pb-4">
