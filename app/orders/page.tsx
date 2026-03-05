@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Order, CargoType } from '../types';
 import { getOrders } from '../utils/storage';
+import Link from 'next/link';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -81,31 +82,33 @@ export default function OrdersPage() {
               className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                 <div className="flex-1">
-                  <div className="cursor-pointer">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-semibold">
-                        {order.senderCity} &rarr; {order.receiverCity}
-                      </span>
-                      <span
-                        className={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}>
-                        {getStatusLabel(order.status)}
-                      </span>
+                  <Link href={`/orders/${order.id}`}>
+                    <div className="cursor-pointer">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-semibold">
+                          {order.senderCity} &rarr; {order.receiverCity}
+                        </span>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}>
+                          {getStatusLabel(order.status)}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600">Отправитель: {order.senderName}</p>
+                      <p className="text-sm text-gray-600">Получатель: {order.receiverName}</p>
+                      <p className="text-sm text-gray-600">
+                        Тип: {cargoTypeLabels[order.cargoType]} | Вес: {order.weight} кг
+                      </p>
+                      <p className="text-xs text-gray-400 mt-2">
+                        {new Date(order.createdAt).toLocaleDateString('ru-RU', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
                     </div>
-                    <p className="text-sm text-gray-600">Отправитель: {order.senderName}</p>
-                    <p className="text-sm text-gray-600">Получатель: {order.receiverName}</p>
-                    <p className="text-sm text-gray-600">
-                      Тип: {cargoTypeLabels[order.cargoType]} | Вес: {order.weight} кг
-                    </p>
-                    <p className="text-xs text-gray-400 mt-2">
-                      {new Date(order.createdAt).toLocaleDateString('ru-RU', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
