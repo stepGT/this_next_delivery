@@ -1,15 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProgressBar from './components/ProgressBar';
 import { useRouter } from 'next/navigation';
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
+import { OrderFormData } from './types';
+
+const initialFormData: OrderFormData = {
+  senderName: '',
+  senderPhone: '',
+  senderCity: '',
+};
 
 export default function Home() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<OrderFormData>(initialFormData);
 
   const handleNext = () => {
     setCurrentStep((num) => Math.min(num + 1, 3));
@@ -23,10 +31,29 @@ export default function Home() {
     setCurrentStep((num) => Math.max(num - 1, 1));
   };
 
+  const updateFormData = (data: Partial<OrderFormData>) => {
+    const newData = { ...formData, ...data };
+    setFormData(newData);
+    localStorage.setItem('orders', JSON.stringify(newData));
+  };
+
+  useEffect(() => {
+    const orders = localStorage.getItem('orders');
+    if (orders) {
+      try {
+        setFormData(JSON.parse(orders));
+      } catch (error) {
+        console.error('Failed to load orders:', error);
+      }
+    }
+  }, []);
+
   return (
     <div className="">
       <ProgressBar currentStep={currentStep} totalSteps={3} />
-      {currentStep === 1 && <Step1 onNext={handleNext} />}
+      {currentStep === 1 && (
+        <Step1 formData={formData} updateFormData={updateFormData} onNext={handleNext} />
+      )}
       {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} />}
       {currentStep === 3 && <Step3 onSubmit={handleSubmit} onBack={handleBack} />}
     </div>
