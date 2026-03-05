@@ -1,11 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CargoType, Step2Props } from '../types';
 import { CITIES } from '../utils/cities';
+import { receiverSchema } from '../utils/validation';
+import z from 'zod';
 
 const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack }) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
-    onNext();
+    if (formData.senderCity === formData.receiverCity) {
+      setErrors({ receiverCity: 'Город назначения не может совпадать с городом отправления' });
+      return;
+    }
+
+    if (formData.weight === '') {
+      setErrors({ weight: 'Введите вес посылки' });
+      return;
+    }
+
+    const weightNum = Number(formData.weight);
+    if (isNaN(weightNum)) {
+      setErrors({ weight: 'Введите корректное число' });
+      return;
+    }
+
+    try {
+      receiverSchema.parse({
+        receiverName: formData.receiverName,
+        receiverCity: formData.receiverCity,
+        cargoType: formData.cargoType,
+        weight: weightNum,
+      });
+      setErrors({});
+      onNext();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.issues.forEach((issue) => {
+          if (issue.path[0]) {
+            newErrors[issue.path[0] as string] = issue.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+    }
   };
 
   const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,6 +56,14 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
       if (!isNaN(numValue)) {
         updateFormData({ weight: numValue });
       }
+    }
+
+    if (errors.weight) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.weight;
+        return newErrors;
+      });
     }
   };
 
@@ -39,9 +85,19 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
           value={formData.receiverName}
           onChange={(e) => {
             updateFormData({ receiverName: e.target.value });
+            if (errors.receiverName) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.receiverName;
+                return newErrors;
+              });
+            }
           }}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.receiverName ? 'border-red-500' : 'border-gray-300'
+          }`}
         />
+        {errors.receiverName && <p className="mt-1 text-sm text-red-600">{errors.receiverName}</p>}
       </div>
 
       <div>
@@ -53,8 +109,17 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
           value={formData.receiverCity}
           onChange={(e) => {
             updateFormData({ receiverCity: e.target.value });
+            if (errors.receiverCity) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.receiverCity;
+                return newErrors;
+              });
+            }
           }}
-          className={`text-gray-700 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}>
+          className={`text-gray-700 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.receiverCity ? 'border-red-500' : 'border-gray-300'
+          }`}>
           <option value="">Выберите город</option>
           {CITIES.map((city) => (
             <option key={city} value={city}>
@@ -62,6 +127,7 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
             </option>
           ))}
         </select>
+        {errors.receiverCity && <p className="mt-1 text-sm text-red-600">{errors.receiverCity}</p>}
       </div>
 
       <div>
@@ -76,6 +142,13 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
                 checked={formData.cargoType === type.value}
                 onChange={(e) => {
                   updateFormData({ cargoType: e.target.value as CargoType });
+                  if (errors.cargoType) {
+                    setErrors((prev) => {
+                      const newErrors = { ...prev };
+                      delete newErrors.cargoType;
+                      return newErrors;
+                    });
+                  }
                 }}
                 className="mr-2"
               />
@@ -95,10 +168,11 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData, onNext, onBack 
           value={formData.weight === '' ? '' : formData.weight}
           onChange={handleWeightChange}
           step="0.1"
-          min="0.1"
-          max="30"
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300`}
+          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.weight ? 'border-red-500' : 'border-gray-300'
+          }`}
         />
+        {errors.weight && <p className="mt-1 text-sm text-red-600">{errors.weight}</p>}
       </div>
 
       <div className="flex justify-between">
