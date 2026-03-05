@@ -12,3 +12,9 @@ export const receiverSchema = z.object({
   cargoType: z.enum(['documents', 'fragile', 'regular']),
   weight: z.number().min(0.1, 'Вес должен быть от 0.1 кг').max(30, 'Вес должен быть до 30 кг'),
 });
+
+export const agreementSchema = z.object({
+  agreedToTerms: z.boolean().refine((val) => val === true, {
+    message: 'Необходимо согласиться с условиями',
+  }),
+});

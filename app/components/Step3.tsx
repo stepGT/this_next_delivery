@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Step3Props } from '../types';
+import { agreementSchema } from '../utils/validation';
+import { z } from 'zod';
 
 const Step3: React.FC<Step3Props> = ({ formData, updateFormData, onSubmit, onBack }) => {
+  const [error, setError] = useState<string>('');
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
-    onSubmit();
+
+    try {
+      agreementSchema.parse({ agreedToTerms: formData.agreedToTerms });
+      setError('');
+      onSubmit();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstIssue = error.issues[0];
+        setError(firstIssue.message);
+      } else {
+        setError('Необходимо согласиться с условиями');
+      }
+    }
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     updateFormData({ agreedToTerms: checked });
+    if (error) {
+      setError('');
+    }
   };
 
   const cargoTypeLabels = {
@@ -17,6 +35,12 @@ const Step3: React.FC<Step3Props> = ({ formData, updateFormData, onSubmit, onBac
     fragile: 'Хрупкое',
     regular: 'Обычное',
   };
+
+  useEffect(() => {
+    if (formData.agreedToTerms) {
+      setError('');
+    }
+  }, [formData.agreedToTerms]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -51,6 +75,7 @@ const Step3: React.FC<Step3Props> = ({ formData, updateFormData, onSubmit, onBac
             Я согласен с условиями обработки данных *
           </span>
         </label>
+        {error && <p className="text-sm text-red-600 ml-7">{error}</p>}
       </div>
 
       <div className="flex justify-between pt-4">
