@@ -16,6 +16,7 @@ const initialFormData: OrderFormData = {
   receiverCity: '',
   cargoType: 'regular',
   weight: '',
+  agreedToTerms: false,
 };
 
 export default function Home() {
@@ -66,7 +67,14 @@ export default function Home() {
           onBack={handleBack}
         />
       )}
-      {currentStep === 3 && <Step3 onSubmit={handleSubmit} onBack={handleBack} />}
+      {currentStep === 3 && (
+        <Step3
+          formData={formData}
+          updateFormData={updateFormData}
+          onSubmit={handleSubmit}
+          onBack={handleBack}
+        />
+      )}
     </div>
   );
 }

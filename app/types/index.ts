@@ -18,6 +18,8 @@ export interface Step2Props {
 
 export interface Step3Props {
   onSubmit: () => void;
+  formData: OrderFormData;
+  updateFormData: (data: Partial<OrderFormData>) => void;
   onBack: () => void;
 }
 
@@ -29,6 +31,7 @@ export interface OrderFormData {
   receiverCity: string;
   cargoType: CargoType;
   weight: number | '';
+  agreedToTerms: boolean;
 }
 
 export type CargoType = 'documents' | 'fragile' | 'regular';
