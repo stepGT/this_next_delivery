@@ -11,6 +11,8 @@ export interface Step1Props {
 
 export interface Step2Props {
   onNext: () => void;
+  formData: OrderFormData;
+  updateFormData: (data: Partial<OrderFormData>) => void;
   onBack: () => void;
 }
 
@@ -23,6 +25,10 @@ export interface OrderFormData {
   senderName: string;
   senderPhone: string;
   senderCity: string;
+  receiverName: string;
+  receiverCity: string;
+  cargoType: CargoType;
+  weight: number | '';
 }
 
 export type CargoType = 'documents' | 'fragile' | 'regular';

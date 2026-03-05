@@ -12,6 +12,10 @@ const initialFormData: OrderFormData = {
   senderName: '',
   senderPhone: '',
   senderCity: '',
+  receiverName: '',
+  receiverCity: '',
+  cargoType: 'regular',
+  weight: '',
 };
 
 export default function Home() {
@@ -54,7 +58,14 @@ export default function Home() {
       {currentStep === 1 && (
         <Step1 formData={formData} updateFormData={updateFormData} onNext={handleNext} />
       )}
-      {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} />}
+      {currentStep === 2 && (
+        <Step2
+          formData={formData}
+          updateFormData={updateFormData}
+          onNext={handleNext}
+          onBack={handleBack}
+        />
+      )}
       {currentStep === 3 && <Step3 onSubmit={handleSubmit} onBack={handleBack} />}
     </div>
   );
