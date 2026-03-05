@@ -58,7 +58,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="">
+    <div className="max-w-2xl mx-auto">
       <ProgressBar currentStep={currentStep} totalSteps={3} />
       {currentStep === 1 && (
         <Step1 formData={formData} updateFormData={updateFormData} onNext={handleNext} />
