@@ -7,6 +7,8 @@ import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
 import { OrderFormData } from './types';
+import { saveOrder } from './utils/storage';
+import { ORDER } from './constants';
 
 const initialFormData: OrderFormData = {
   senderName: '',
@@ -29,6 +31,8 @@ export default function Home() {
   };
 
   const handleSubmit = () => {
+    saveOrder(formData);
+    localStorage.removeItem(ORDER);
     router.push('/orders');
   };
 
@@ -39,11 +43,11 @@ export default function Home() {
   const updateFormData = (data: Partial<OrderFormData>) => {
     const newData = { ...formData, ...data };
     setFormData(newData);
-    localStorage.setItem('orders', JSON.stringify(newData));
+    localStorage.setItem(ORDER, JSON.stringify(newData));
   };
 
   useEffect(() => {
-    const orders = localStorage.getItem('orders');
+    const orders = localStorage.getItem(ORDER);
     if (orders) {
       try {
         setFormData(JSON.parse(orders));

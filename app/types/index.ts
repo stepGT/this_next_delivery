@@ -34,4 +34,19 @@ export interface OrderFormData {
   agreedToTerms: boolean;
 }
 
+export interface Order {
+  id: string;
+  senderName: string;
+  senderPhone: string;
+  senderCity: string;
+  receiverName: string;
+  receiverCity: string;
+  cargoType: CargoType;
+  weight: number;
+  createdAt: string;
+  status: OrderStatus;
+}
+
 export type CargoType = 'documents' | 'fragile' | 'regular';
+
+export type OrderStatus = 'pending' | 'confirmed' | 'delivered';
