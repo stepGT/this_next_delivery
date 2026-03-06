@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { Order, CargoType } from '../types';
-import { getOrders } from '../utils/storage';
+import { getOrders, deleteOrder } from '../utils/storage';
 import Link from 'next/link';
+import Dialog from '../components/Dialog';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<CargoType | 'all'>('all');
+  const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     setOrders(getOrders());
@@ -46,6 +49,23 @@ export default function OrdersPage() {
     documents: 'Документы',
     fragile: 'Хрупкое',
     regular: 'Обычное',
+  };
+
+  const handleDelete = (id: string) => {
+    setOrderToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const loadOrders = () => {
+    setOrders(getOrders());
+  };
+
+  const confirmDelete = () => {
+    if (orderToDelete) {
+      deleteOrder(orderToDelete);
+      loadOrders();
+      setOrderToDelete(null);
+    }
   };
 
   return (
@@ -110,11 +130,23 @@ export default function OrdersPage() {
                     </div>
                   </Link>
                 </div>
+                <button
+                  onClick={() => handleDelete(order.id)}
+                  className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                  Удалить
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
+      <Dialog
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={confirmDelete}
+        title="Удаление заявки"
+        message="Вы уверены, что хотите удалить эту заявку? Это действие нельзя отменить."
+      />
     </div>
   );
 }

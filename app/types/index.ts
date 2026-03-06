@@ -47,6 +47,14 @@ export interface Order {
   status: OrderStatus;
 }
 
+export interface DialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+}
+
 export type CargoType = 'documents' | 'fragile' | 'regular';
 
 export type OrderStatus = 'pending' | 'confirmed' | 'delivered';

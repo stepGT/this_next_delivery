@@ -26,3 +26,9 @@ export const saveOrder = (orderData: OrderFormData): Order => {
   localStorage.setItem(ALL_ORDERS, JSON.stringify(orders));
   return newOrder;
 };
+
+export const deleteOrder = (id: string): void => {
+  const orders = getOrders();
+  const filteredOrders = orders.filter((order) => order.id !== id);
+  localStorage.setItem(ALL_ORDERS, JSON.stringify(filteredOrders));
+};
