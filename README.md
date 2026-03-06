@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Доставка Посылок - Мини-приложение для оформления заявок
 
-## Getting Started
+Веб-приложение для оформления заявок на доставку посылок с многошаговой формой и историей заявок. Разработано на Next.js с использованием TypeScript и Tailwind CSS.
 
-First, run the development server:
+## 📋 Функциональность
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Основные возможности
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Форма оформления заявки (3 шага)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Шаг 1 - Отправитель**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Имя (обязательное, минимум 2 символа)
+- Телефон (обязательный, с маской ввода +7 (**_) _**-**-**)
+- Город отправления (обязательный, выпадающий список)
 
-## Learn More
+**Шаг 2 - Получатель и посылка**
 
-To learn more about Next.js, take a look at the following resources:
+- Имя получателя (обязательное)
+- Город назначения (обязательный, не может совпадать с городом отправления)
+- Тип груза: документы / хрупкое / обычное
+- Вес, кг (обязательный, от 0.1 до 30 кг)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Шаг 3 - Подтверждение**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Сводка всех введенных данных (режим только для чтения)
+- Чекбокс согласия с условиями (обязательный)
+- Кнопка отправки
 
-## Deploy on Vercel
+**Навигация**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Прогресс-бар / степпер показывает текущий шаг
+- Кнопки "Назад" / "Далее" с сохранением данных при возврате
+- Автосохранение черновика в localStorage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### История заявок (/orders)
+
+- Список всех оформленных заявок из localStorage
+- Карточка заявки содержит: откуда → куда, имя отправителя, тип груза, дату создания, статус
+- Поиск по имени получателя и городу назначения
+- Фильтрация по типу груза
+- Удаление заявки с кастомным диалогом подтверждения
+- При клике на заявку - детальная страница с полной информацией
+
+## 🛠 Технологии
+
+- **Next.js 14** (App Router)
+- **TypeScript** - полная типизация
+- **Tailwind CSS** - стилизация без UI-библиотек
+- **Zod** - валидация форм
+- **localStorage** - хранение данных
+
+## 🚀 Установка и запуск
+
+1. **Клонирование репозитория**
+
+   ```bash
+   git clone https://github.com/stepGT/this_next_delivery
+   cd delivery-orders
+   
+   ## Запуск в режиме разработки
+   npm run dev
+   
+   ## Сборка для продакшена
+   npm run build
+   npm start
+   ```
+
+   ![Alt text](screenshot.png)
